@@ -3,34 +3,25 @@ const fs = require('fs');
 const path = require('path');
 const csv = require('csvtojson');
 
-async function getDataFromCSVFile( path = '' ) {
-    return await csv().fromFile(path);
+async function convertDataFromCSVFile( chunk ) {
+    return csv({ noheader: true, output: "csv" }).fromString(chunk);
 }
 
 async function writeDataToTXTFile() {
     //fs.writeFile(  )
 }
 
-(async function main() {
-    try{
+const readFilePath = path.resolve('./task2/csv/example.csv');
+const writeFilePath = path.resolve('./task2/txt/result.txt');
 
-    }
-    catch (error) {
-        console.trace(error);
-    }
-}());
+const readStream = new fs.createReadStream(readFilePath, "utf8");
+const writeStream = fs.createWriteStream(writeFilePath);
 
-const filePath = path.resolve('./task2/csv/example.csv');
-//const data = await getDataFromCSVFile(filePath);
-const stream = new fs.ReadStream(filePath);
+readStream.on("data", async function(chunk){
+    const [ headers, ...rows ] = await convertDataFromCSVFile(chunk);
+    console.log(headers);
 
-stream.on('readable', function(){
-    const data = stream.read();
-
-    if(data != null)
-        console.log(data.toString());
 });
 
-stream.on('end', function(){
-    console.log("THE END");
-});
+
+// readStream.pipe(writeStream);
