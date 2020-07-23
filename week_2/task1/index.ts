@@ -1,11 +1,11 @@
 import express = require('express');
 
+import userRouter from './routers/users.router';
+
 const app: express.Application = express();
 
-app.get('/', function (req, res) {
-    res.send('Hello World!');
-});
+app.use('/users', userRouter);
 
 app.listen(3000, function () {
-    console.log('App is listening on port 3000 fff!');
+    console.log('App is listening on port 3000!');
 });
