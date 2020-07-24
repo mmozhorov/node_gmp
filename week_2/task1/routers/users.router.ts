@@ -10,7 +10,7 @@ router.get('/:id', ( req: express.Request, res: express.Response ) => {
     const user: User | null = UsersService.getUserById(req.params.id);
 
     if (user)
-        res.status(200).json({ "user": { name: user.login, age: user.age } });
+        res.status(200).json({ "user": { login: user.login, age: user.age } });
     else
         res.status(404).json({ "message": "Not Found!" });
 });
@@ -18,13 +18,30 @@ router.get('/:id', ( req: express.Request, res: express.Response ) => {
 router.post('/', ( req: express.Request, res: express.Response ) => {
     const { login, password, age } = req.body;
 
-    UsersService.createUser({
+    const newUserId: string | null = UsersService.createUser({
         id: uuidv4(),
         login,
         password,
         age,
         isDeleted: false
     });
+
+    if (newUserId)
+        res.status(200).json({ newUserId });
+    else
+        res.status(500).json({ "message": "Something went wrong!" });
+});
+
+router.put('/:id', ( req: express.Request, res: express.Response ) => {
+    const id = req.params.id;
+
+    const updatedUser: User | null = UsersService.updateUser(id, req.body);
+
+    if (updatedUser)
+        res.status(200).json({ "user": updatedUser });
+    else
+        res.status(500).json({ "message": "Something went wrong!" });
+
 });
 
 export default router;
