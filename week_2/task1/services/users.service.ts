@@ -40,4 +40,11 @@ export default class UsersService {
 
         return null;
     }
+
+    public static removeUser(userId: string): boolean{
+        for( let i = 0; i < users.length; i++ )
+            if (users[i].id === userId)
+                users.splice(i, 1);
+            return true;
+    }
 }

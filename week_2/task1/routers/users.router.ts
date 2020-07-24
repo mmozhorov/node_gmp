@@ -41,7 +41,13 @@ router.put('/:id', ( req: express.Request, res: express.Response ) => {
         res.status(200).json({ "user": updatedUser });
     else
         res.status(500).json({ "message": "Something went wrong!" });
+});
 
+router.delete('/:id', ( req: express.Request, res: express.Response ) => {
+    if (UsersService.removeUser(req.params.id))
+        res.status(200).json({ "message": "User successfully removed" });
+    else
+        res.status(500).json({ "message": "Something went wrong!" });
 });
 
 export default router;
