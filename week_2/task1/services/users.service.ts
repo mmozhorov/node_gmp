@@ -1,6 +1,6 @@
 import db from '../db/index.json';
 import { User } from "../types/user.types";
-import {sortingByLoginASC} from "../utils/sortings";
+import {sortingByLoginASC, sortingByMask} from "../utils/sortings";
 
 const users = [...db.users];
 
@@ -9,7 +9,7 @@ export default class UsersService {
         const sortedUsers  = sortingByLoginASC(users);
         // @ts-ignore
         return sortedUsers
-            .filter( ( user: User, i: number) => !user.isDeleted && Number(limit) > i )
+            .filter( ( user: User, i: number) => sortingByMask(loginSubstringIn, user) && !user.isDeleted && Number(limit) > i )
             .map( ( { login, age } ) => ({ login, age }));
     }
 
