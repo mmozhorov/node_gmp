@@ -3,9 +3,19 @@ import { v4 as uuidv4 } from "uuid";
 
 import UsersService from '../services/users.service';
 import { createUserValidationMiddleware } from '../utils/user-validation.middleware';
-import { User } from "../types/user.types";
+import {User, UserLimit} from "../types/user.types";
 
 const router = express.Router();
+
+router.get('/', ( req: express.Request, res: express.Response ) => {
+    const { loginSubstringIn = '', limit = UserLimit.DEFAULT} = req.query;
+    const users: User[] | null = UsersService.getAutoSuggestUsers(String(loginSubstringIn), String(limit));
+
+    if (users)
+        res.status(200).json({ "users": users });
+    else
+        res.status(404).json({ "message": "Not Found!" });
+});
 
 router.get('/:id', ( req: express.Request, res: express.Response ) => {
     const user: User | null = UsersService.getUserById(req.params.id);

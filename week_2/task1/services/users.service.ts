@@ -1,9 +1,18 @@
 import db from '../db/index.json';
 import { User } from "../types/user.types";
+import {sortingByLoginASC} from "../utils/sortings";
 
 const users = [...db.users];
 
 export default class UsersService {
+    public static getAutoSuggestUsers( loginSubstringIn: string, limit: string ): User[] | null {
+        const sortedUsers  = sortingByLoginASC(users);
+        // @ts-ignore
+        return sortedUsers
+            .filter( ( user: User, i: number) => !user.isDeleted && Number(limit) > i )
+            .map( ( { login, age } ) => ({ login, age }));
+    }
+
     public static getUserById( desiredId: string ): User | null {
         return users.find( ({ id, isDeleted }) => (id === desiredId) && !isDeleted) || null;
     }

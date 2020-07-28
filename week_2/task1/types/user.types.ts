@@ -5,3 +5,8 @@ export type User = {
     age: number,
     isDeleted: boolean
 };
+
+export enum UserLimit {
+    DEFAULT = '20',
+    MIN = '10'
+}
