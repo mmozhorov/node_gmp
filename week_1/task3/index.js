@@ -1,6 +1,8 @@
 import fs from 'fs';
 import path from 'path';
 import csv from 'csvtojson';
+import { Transform } from 'stream';
+
 
 async function convertDataFromCSVString( chunk ) {
     return csv({ noheader: true, output: "csv" }).fromString(chunk);
@@ -14,28 +16,28 @@ function generateJSONRow( headers, row ) {
     return JSON.stringify(result) + '\n';
 }
 
-const readFilePath = path.resolve('./task3/csv/example.csv');
-const writeFilePath = path.resolve('./task3/txt/result.txt');
+const readStream = new fs.createReadStream(path.resolve('./task3/csv/example.csv'), "utf8");
+const writeStream = fs.createWriteStream(path.resolve('./task3/txt/result.txt'));
 
-const readStream = new fs.createReadStream(readFilePath, "utf8");
-const writeStream = fs.createWriteStream(writeFilePath);
+let headers = null;
 
-readStream.on("data", async function(chunk){
-    const [ headers, ...rows ] = await convertDataFromCSVString(chunk);
-    const resultJSON = rows.map( row => generateJSONRow( headers, row ));
+const processStream = new Transform({
+    async transform(chunk, encoding, callback){
+        let rows = await convertDataFromCSVString(chunk.toString());
 
-    writeStream.write(resultJSON.join(''));
+        if ( !headers ){
+            headers = rows[0];
+            rows.splice(0,1);
+        }
 
-    writeStream.on('error', err => {
-        console.error(err);
-    });
+        const resultJSON = rows.map( row => generateJSONRow( headers, row ));
+        callback(null, resultJSON.join(''));
+
+    },
+    flush(callback){
+        callback();
+    }
 });
 
 
-readStream.on('error', err => {
-    console.error(err);
-});
-
-readStream.on('end', function () {
-    writeStream.end();
-});
+readStream.pipe(processStream).pipe(writeStream);

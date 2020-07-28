@@ -1,6 +1,5 @@
 const fs = require('fs');
-const { pipeline, Duplex, Transform } = require('stream');
-const { promisify } = require('util');
+const { Transform } = require('stream');
 const path = require('path');
 const csv = require('csvtojson');
 
@@ -15,17 +14,25 @@ function generateJSONRow( headers, row ) {
     }
     return JSON.stringify(result) + '\n';
 }
-//
+
 const readStream = new fs.createReadStream(path.resolve('./task2/csv/example.csv'), "utf8");
 const writeStream = fs.createWriteStream(path.resolve('./task2/txt/result.txt'));
 
+let headers = null;
+
 const processStream = new Transform({
-    transform(chunk, encoding, callback){
-        console.log(chunk.toString());
-        callback(null, chunk);
+    async transform(chunk, encoding, callback){
+        let rows = await convertDataFromCSVString(chunk.toString());
+
+        if ( !headers ){
+            headers = rows[0];
+            rows.splice(0,1);
+        }
+
+        const resultJSON = rows.map( row => generateJSONRow( headers, row ));
+        callback(null, resultJSON.join(''));
 
     },
-
     flush(callback){
         callback();
     }
