@@ -1,7 +1,7 @@
 import fs from 'fs';
 import path from 'path';
 import csv from 'csvtojson';
-import { Transform } from 'stream';
+import { pipeline, Transform } from 'stream';
 
 
 async function convertDataFromCSVString( chunk ) {
@@ -39,5 +39,15 @@ const processStream = new Transform({
     }
 });
 
-
-readStream.pipe(processStream).pipe(writeStream);
+pipeline(
+    readStream,
+    processStream,
+    writeStream,
+    (err) => {
+        if (err) {
+            console.error('Pipeline failed.', err);
+        } else {
+            console.log('Pipeline succeeded.');
+        }
+    }
+);
