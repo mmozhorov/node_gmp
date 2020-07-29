@@ -1,5 +1,5 @@
 const fs = require('fs');
-const { Transform } = require('stream');
+const { pipeline, Transform } = require('stream');
 const path = require('path');
 const csv = require('csvtojson');
 
@@ -15,7 +15,7 @@ function generateJSONRow( headers, row ) {
     return JSON.stringify(result) + '\n';
 }
 
-const readStream = new fs.createReadStream(path.resolve('./task2/csv/example.csv'), "utf8");
+const readStream = fs.createReadStream(path.resolve('./task2/csv/example.csv'), "utf8");
 const writeStream = fs.createWriteStream(path.resolve('./task2/txt/result.txt'));
 
 let headers = null;
@@ -38,4 +38,15 @@ const processStream = new Transform({
     }
 });
 
-readStream.pipe(processStream).pipe(writeStream);
+pipeline(
+    readStream,
+    processStream,
+    writeStream,
+    (err) => {
+        if (err) {
+            console.error('Pipeline failed.', err);
+        } else {
+            console.log('Pipeline succeeded.');
+        }
+    }
+);
