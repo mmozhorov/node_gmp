@@ -15,3 +15,8 @@ export const createUserValidationMiddleware = (req: express.Request, res: expres
     const errors = validate(req.body, schemas.createUserSchema);
     return errors ? next(errors): next();
 };
+
+export const updateUserValidationMiddleware = (req: express.Request, res: express.Response, next: any) => {
+    const errors = validate(req.body, schemas.updateUserSchema);
+    return errors ? next(errors): next();
+};

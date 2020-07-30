@@ -2,8 +2,8 @@ import express = require('express');
 import { v4 as uuidv4 } from "uuid";
 
 import UsersService from '../services/users.service';
-import { createUserValidationMiddleware } from '../utils/user-validation.middleware';
-import {User, UserLimit} from "../types/user.types";
+import { createUserValidationMiddleware, updateUserValidationMiddleware } from '../utils/user-validation.middleware';
+import { User, UserLimit } from "../types/user.types";
 
 const router = express.Router();
 
@@ -43,7 +43,7 @@ router.post('/', createUserValidationMiddleware,( req: express.Request, res: exp
         res.status(500).json({ "message": "Something went wrong!" });
 });
 
-router.put('/:id', ( req: express.Request, res: express.Response ) => {
+router.put('/:id', updateUserValidationMiddleware,  ( req: express.Request, res: express.Response ) => {
     const id = req.params.id;
 
     const updatedUser: User | null = UsersService.updateUser(id, req.body);
