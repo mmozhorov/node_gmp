@@ -1,11 +1,10 @@
 import express = require('express');
-import bodyParser = require('body-parser');
 
 import userRouter from './routers/users.router';
 
 const app: express.Application = express();
 
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(express.json());
 
 app.use('/users', userRouter);
 

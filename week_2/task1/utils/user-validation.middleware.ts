@@ -12,7 +12,6 @@ const validate = ( data: any, schema: any) => {
 };
 
 export const createUserValidationMiddleware = (req: express.Request, res: express.Response, next: any) => {
-    const { login, password, age } = req.body;
-    const errors = validate({ login, password, age: Number(age) || age }, schemas.createUserSchema);
+    const errors = validate(req.body, schemas.createUserSchema);
     return errors ? next(errors): next();
 };
