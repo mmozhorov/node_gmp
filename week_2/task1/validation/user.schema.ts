@@ -1,21 +1,17 @@
 export const createUserSchema = {
     type: 'object',
     required: ['login', 'password', 'age'],
-    items: {
+    properties: {
         "age": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 30
+            "type": "integer",
+            "minimum": 4,
+            "maximum": 130
         },
         "login": {
-            "type": "string",
-            "minLength": 3,
-            "maxLength": 30
+            "type": "string"
         },
         "password": {
-            "type": "string",
-            "minLength": 6,
-            "maxLength": 30
+            "type": "string"
         },
     }
 };
