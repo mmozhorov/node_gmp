@@ -1,22 +1,28 @@
-import { Client } from 'pg';
+import Sequelize from 'sequelize';
 import { config } from 'dotenv';
 
 export class DB {
-    private readonly conString: string;
-    private readonly client: Client;
+    private readonly sequelize: any;
 
     constructor() {
         // @ts-ignore
         const { DB, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD } = config().parsed;
-        this.conString = `postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB}`;
-        this.client = new Client(this.conString);
+        // @ts-ignore
+        this.sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB}`);
     }
 
     async connect(){
-        await this.client.connect();
+        try {
+            await this.sequelize.authenticate();
+            console.log('Connection has been established successfully.');
+        }
+        catch (error) {
+            console.error('Unable to connect to the database:', error);
+        }
     }
 
-    async disconnect(){
-        await this.client.end();
+    async query(){
+
     }
+
 }

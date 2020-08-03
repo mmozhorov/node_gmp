@@ -10,10 +10,6 @@ class DBService{
     connect() {
         this.client.connect();
     }
-
-    disconnect() {
-        this.client.disconnect();
-    }
 }
 
 export const DBServiceInstance = new DBService(DB);
