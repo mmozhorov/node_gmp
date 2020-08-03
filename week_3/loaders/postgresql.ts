@@ -1,4 +1,4 @@
-import Sequelize from 'sequelize';
+const Sequelize = require('sequelize');
 import { config } from 'dotenv';
 
 export class DB {
@@ -11,7 +11,7 @@ export class DB {
         this.sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB}`);
     }
 
-    async connect(){
+    async connect() {
         try {
             await this.sequelize.authenticate();
             console.log('Connection has been established successfully.');
@@ -21,8 +21,8 @@ export class DB {
         }
     }
 
-    async query(){
-
+    async query( query: string ) {
+        return await this.sequelize.query(query);
     }
 
 }

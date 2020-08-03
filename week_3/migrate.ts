@@ -1,4 +1,4 @@
-const { config } = require('dotenv');
+import { DBServiceInstance } from './services/DBService';
 
 async function clearDatabase() {
 }
@@ -8,8 +8,16 @@ async function fillDatabase() {
 
 (async function migrate() {
     try {
-        const env = config().parsed;
-
+        await DBServiceInstance.connect();
+        const result = await DBServiceInstance.query(`
+            CREATE TABLE users (
+                email varchar,
+                firstName varchar,
+                lastName varchar,
+                age int
+            );`
+        );
+        console.log(result);
 
         console.info('successful migration');
     }
