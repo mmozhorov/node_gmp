@@ -8,7 +8,7 @@ class DBService{
     }
 
     async connect() {
-        this.client.connect();
+        return this.client.connect();
     }
 
     async query( query: string ) {
