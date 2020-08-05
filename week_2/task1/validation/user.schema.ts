@@ -9,7 +9,8 @@ const USER_LOGIN_PROPERTIES = {
 };
 
 const USER_PASSWORD_PROPERTIES = {
-    "type": "string"
+    "type": "string",
+    "pattern": "(?!^[0-9]*$)(?!^[a-zA-Z]*$)^([a-zA-Z0-9]{2,255})$"
 };
 
 export const createUserSchema = {
