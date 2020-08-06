@@ -7,14 +7,17 @@ import { User, UserLimit } from "../types/user.types";
 
 const router = express.Router();
 
-router.get('/', ( req: express.Request, res: express.Response ) => {
+router.get('/', ( req: express.Request, res: express.Response, next ) => {
     const { loginSubstringIn = '', limit = UserLimit.DEFAULT} = req.query;
     const users: User[] | null = UsersService.getAutoSuggestUsers(String(loginSubstringIn), String(limit));
 
     if (users)
         res.status(200).json({ "users": users });
     else
-        res.status(404).json({ "message": "Not Found!" });
+        return next({
+            statusCode: 404,
+            message: "User not found!"
+        });
 });
 
 router.get('/:id', ( req: express.Request, res: express.Response ) => {
@@ -26,7 +29,7 @@ router.get('/:id', ( req: express.Request, res: express.Response ) => {
         res.status(404).json({ "message": "Not Found!" });
 });
 
-router.post('/', createUserValidationMiddleware,( req: express.Request, res: express.Response ) => {
+router.post('/', createUserValidationMiddleware,( req: express.Request, res: express.Response, next ) => {
     const { login, password, age } = req.body;
 
     const newUserId: string | null = UsersService.createUser({
@@ -40,10 +43,13 @@ router.post('/', createUserValidationMiddleware,( req: express.Request, res: exp
     if (newUserId)
         res.status(200).json({ newUserId });
     else
-        res.status(500).json({ "message": "Something went wrong!" });
+        return next({
+            statusCode: 400,
+            message: "User already exist!"
+        });
 });
 
-router.put('/:id', updateUserValidationMiddleware,  ( req: express.Request, res: express.Response ) => {
+router.put('/:id', updateUserValidationMiddleware,  ( req: express.Request, res: express.Response, next ) => {
     const id = req.params.id;
 
     const updatedUser: User | null = UsersService.updateUser(id, req.body);
@@ -51,14 +57,20 @@ router.put('/:id', updateUserValidationMiddleware,  ( req: express.Request, res:
     if (updatedUser)
         res.status(200).json({ "user": updatedUser });
     else
-        res.status(500).json({ "message": "Something went wrong!" });
+        return next({
+            statusCode: 404,
+            message: "User not found!"
+        });
 });
 
-router.delete('/:id', ( req: express.Request, res: express.Response ) => {
+router.delete('/:id', ( req: express.Request, res: express.Response, next ) => {
     if (UsersService.removeUser(req.params.id))
         res.status(200).json({ "message": "User successfully removed" });
     else
-        res.status(500).json({ "message": "Something went wrong!" });
+        return next({
+            statusCode: 404,
+            message: "User not found!"
+        });
 });
 
 export default router;

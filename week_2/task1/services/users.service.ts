@@ -5,6 +5,10 @@ import {sortingByLoginASC, sortingByMask} from "../utils/sortings";
 const users = [...db.users];
 
 export default class UsersService {
+    public static isUserAlreadyExist( login: string ): boolean {
+        return Boolean(users.find( user => user.login === login ));
+    }
+
     public static getAutoSuggestUsers( loginSubstringIn: string, limit: string ): User[] | null {
         const sortedUsers  = sortingByLoginASC(users);
         // @ts-ignore
@@ -18,7 +22,8 @@ export default class UsersService {
     }
 
     public static createUser(newUser : User): string | null {
-        if( users.push(newUser) )
+
+        if( !UsersService.isUserAlreadyExist(newUser.login) && users.push(newUser) )
             return newUser.id;
 
         return null;

@@ -14,11 +14,16 @@ const validate = ( data: any, schema: any) => {
 
 export const createUserValidationMiddleware = (req: express.Request, res: express.Response, next: any) => {
     const errors = validate(req.body, schemas.createUserSchema);
-    console.log(errors);
-    return errors ? next(errors): next();
+    return errors ? next({
+        statusCode: 400,
+        message: errors.map( err => err.message ).join(',')
+    }): next();
 };
 
 export const updateUserValidationMiddleware = (req: express.Request, res: express.Response, next: any) => {
     const errors = validate(req.body, schemas.updateUserSchema);
-    return errors ? next(errors): next();
+    return errors ? next({
+        statusCode: 400,
+        message: errors.map( err => err.message ).join(',')
+    }): next();
 };
