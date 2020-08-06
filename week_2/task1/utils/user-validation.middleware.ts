@@ -3,7 +3,8 @@ import Ajv from 'ajv';
 
 import * as schemas from '../validation/user.schema';
 
-const ajv = new Ajv({ allErrors: true });
+const ajv = new Ajv({ allErrors: true, jsonPointers: true });
+require('ajv-errors')(ajv /*, {singleError: true} */);
 
 const validate = ( data: any, schema: any) => {
     const validateFunction = ajv.compile(schema);
@@ -13,6 +14,7 @@ const validate = ( data: any, schema: any) => {
 
 export const createUserValidationMiddleware = (req: express.Request, res: express.Response, next: any) => {
     const errors = validate(req.body, schemas.createUserSchema);
+    console.log(errors);
     return errors ? next(errors): next();
 };
 
