@@ -1,9 +1,9 @@
 import { DB } from '../loaders/postgresql';
 
-class DBService{
-    private readonly client: any;
+export class DBService{
+    protected readonly client: any;
 
-    constructor(DB: any) {
+    constructor() {
         this.client = new DB();
     }
 
@@ -15,5 +15,3 @@ class DBService{
         return this.client.query(query);
     }
 }
-
-export const DBServiceInstance = new DBService(DB);

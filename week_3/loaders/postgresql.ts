@@ -1,8 +1,10 @@
+import {User} from "../types/user.types";
+
 const Sequelize = require('sequelize');
 import { config } from 'dotenv';
 
 export class DB {
-    private readonly sequelize: any;
+    protected readonly sequelize: any;
 
     constructor() {
         // @ts-ignore
@@ -24,7 +26,4 @@ export class DB {
     async query( query: string ) {
         return await this.sequelize.query(query);
     }
-
-
-
 }
