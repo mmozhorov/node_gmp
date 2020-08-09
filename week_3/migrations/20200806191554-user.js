@@ -1,22 +1,15 @@
 'use strict';
+const { users } = require('../config/users_default.json');
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('users2', {
+    const USER_TABLE_FIELDS = {
       id: {
         type: Sequelize.INTEGER,
         primaryKey: true,
         autoIncrement: true
       },
-      email: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      firstname: {
-        type: Sequelize.STRING,
-        allowNull: false
-      },
-      lastname: {
+      login: {
         type: Sequelize.STRING,
         allowNull: false
       },
@@ -26,11 +19,26 @@ module.exports = {
       },
       age: {
         type: Sequelize.INTEGER
+      },
+      isDeleted: {
+        type: Sequelize.BOOLEAN,
+        defaultValue: false
       }
-    });
+    };
+
+    await queryInterface.createTable('users', USER_TABLE_FIELDS);
+
+    for await ( let user of users ){
+      await queryInterface.bulkInsert('users', [{
+        login: user.login,
+        password: user.password,
+        age: user.age
+      }
+      ]);
+    }
   },
 
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('users2');
+    await queryInterface.dropTable('users');
   }
 };

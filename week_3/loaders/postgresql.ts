@@ -25,4 +25,6 @@ export class DB {
         return await this.sequelize.query(query);
     }
 
+
+
 }

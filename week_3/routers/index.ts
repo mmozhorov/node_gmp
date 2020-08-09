@@ -1,13 +1,18 @@
-import express from 'express';
+import express = require('express');
 
-const app = express();
+import userRouter from './users.router';
+
+const app: express.Application = express();
 
 app.use(express.json());
 
-app.use(function (err: any, req: express.Request, res: express.Response, next: any) {
-    res.status(err.statusCode).json({
-        'message': err.message
-    });
+app.use('/users', userRouter);
+
+app.use(( err: any, req: express.Request, res: express.Response, next: any ) => {
+    if (err)
+        res.status(err.statusCode).json({
+            message: err.message
+        });
 });
 
 export default app;
