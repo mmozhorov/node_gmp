@@ -38,14 +38,16 @@ class UsersService extends DBService{
         });
     }
 
-    public async createUser( user: User ): Promise<any> {
-        const isUserAlreadyExist = this.getUsersByParams({
-            where: {
-                login: user.login
-            }
-        });
+    public async isUserAlreadyExist( login: string ) {
+        return Boolean(
+            await this.getUsersByParams({
+                where: { login, isDeleted: false }
+            })
+        );
+    }
 
-        if( isUserAlreadyExist )
+    public async createUser( user: User ): Promise<any> {
+        if( await this.isUserAlreadyExist( user.login ) )
             return;
 
         return await this.User.create({
@@ -56,6 +58,16 @@ class UsersService extends DBService{
         });
     }
 
+    public async updateUser( user: User ): Promise<any> {
+        const { id, login } = user;
+
+        if( !await this.isUserAlreadyExist( login ) )
+            return;
+
+        const [ rowsUpdate, [ updatedUser ] ] = await this.User.update( { ...user }, { returning: true, where: { id } });
+
+        return updatedUser;
+    }
 }
 
 const UserServiceInstance = new UsersService();
