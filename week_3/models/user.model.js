@@ -1,10 +1,10 @@
 const Sequelize = require('sequelize');
 
-export const USER_SCHEMA = {
+module.exports.USER_SCHEMA = {
     id: {
-        type: Sequelize.INTEGER,
+        type: Sequelize.STRING,
         primaryKey: true,
-        autoIncrement: true
+        allowNull: false
     },
     login: {
         type: Sequelize.STRING,

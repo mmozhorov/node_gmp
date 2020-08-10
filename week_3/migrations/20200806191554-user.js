@@ -8,6 +8,7 @@ module.exports = {
 
     for await ( let user of users ){
       await queryInterface.bulkInsert('users', [{
+        id: user.id,
         login: user.login,
         password: user.password,
         age: user.age

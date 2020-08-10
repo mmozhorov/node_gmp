@@ -1,9 +1,7 @@
-import { DBService } from './DBService';
-import { User } from "../types/user.types";
-import { USER_SCHEMA } from '../models/user.model';
+import { Op } from 'sequelize';
 
-const Sequelize = require('sequelize');
-const Op = Sequelize.Op;
+import { DBService } from './DBService';
+import { USER_SCHEMA } from '../models/user.model';
 
 class UsersService extends DBService{
     private User: any;

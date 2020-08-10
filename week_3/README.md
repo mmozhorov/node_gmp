@@ -1,2 +1,4 @@
-For migrate: sequelize db:migrate
-For undo migration you should: sequelize db:migrate:undo
+<strong>For migrate database:</strong>
+<code>sequelize db:migrate</code> <br/>
+<strong>For undo migration you should:</strong> 
+<code>sequelize db:migrate:undo</code>
