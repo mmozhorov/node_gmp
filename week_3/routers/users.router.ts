@@ -8,9 +8,16 @@ const router = express.Router();
 
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     const { loginSubstringIn = '', limit = UserLimit.DEFAULT} = req.query;
-    res.status(200).json({
-        data: await UsersService.getUsersByParams({  })
-    })
+    // @ts-ignore
+    const users: User | null = await UsersService.getUsersByParams({ loginSubstringIn, limit });
+
+    if (users)
+        return res.status(200).json({ users });
+
+    return next({
+       statusCode: 400,
+       message: 'Bad request!'
+    });
 });
 
 router.get('/:id', ( req: express.Request, res: express.Response ) => {
