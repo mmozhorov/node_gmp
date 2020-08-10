@@ -51,6 +51,7 @@ router.post('/', createUserValidationMiddleware, async ( req: express.Request, r
         const { login, password, age } = req.body;
         const user = await UsersService.createUser({ login, password, age });
 
+
         if( user )
             return res.status(200).json({ user: {
                     id: user.id,
@@ -92,9 +93,19 @@ router.put('/:id', updateUserValidationMiddleware, async ( req: express.Request,
     }
 });
 
-router.delete('/:id', ( req: express.Request, res: express.Response, next ) => {
+router.delete('/:id', async ( req: express.Request, res: express.Response, next ) => {
     try{
         const { id } = req.params;
+        const result = await UsersService.deleteUser( id );
+
+        if( result )
+            return res.status(200).json({
+                message: 'User successfully removed!'
+            })
+        return next({
+            statusCode: 404,
+            message: 'User not found!'
+        });
     }
     catch( error ){
         next(error);

@@ -21,7 +21,8 @@ class UsersService extends DBService{
     public async getUsersByLoginSubstr(params: { loginSubstringIn?: string, limit?: number }): Promise<any> {
         const users = await this.getUsersByParams({
             where: {
-                login: { [Op.like]: `%${params.loginSubstringIn}%` }
+                login: { [Op.like]: `%${params.loginSubstringIn}%` },
+                isDeleted: false
             },
             limit: params.limit
         });
@@ -39,11 +40,11 @@ class UsersService extends DBService{
     }
 
     public async isUserAlreadyExist( login: string ) {
-        return Boolean(
+        return Boolean((
             await this.getUsersByParams({
                 where: { login, isDeleted: false }
             })
-        );
+            ).length);
     }
 
     public async createUser( user: User ): Promise<any> {
@@ -64,7 +65,18 @@ class UsersService extends DBService{
         if( !await this.isUserAlreadyExist( login ) )
             return;
 
-        const [ rowsUpdate, [ updatedUser ] ] = await this.User.update( { ...user }, { returning: true, where: { id } });
+        const [, [ updatedUser ] ] = await this.User.update( { ...user }, { returning: true, where: { id } });
+
+        return updatedUser;
+    }
+
+    public async deleteUser( id: string ): Promise<any> {
+        const user = await this.getUserById( id );
+
+        if ( !user )
+            return;
+
+        const [, [ updatedUser ] ] = await this.User.update( { isDeleted: true }, { returning: true, where: { id } });
 
         return updatedUser;
     }
