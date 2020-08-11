@@ -1,6 +1,4 @@
-import {User} from "../types/user.types";
-
-const Sequelize = require('sequelize');
+import Sequelize from 'sequelize';
 import { config } from 'dotenv';
 
 export class DB {
