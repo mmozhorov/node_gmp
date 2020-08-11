@@ -1,5 +1,4 @@
 const { DB, DB_HOST, DB_USER, DB_PASSWORD } = require('dotenv').config().parsed;
-
 module.exports = {
   "development": {
     "username": DB_USER,
