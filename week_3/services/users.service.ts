@@ -14,7 +14,15 @@ class UsersService extends DBService{
         this.User = this.client.sequelize.define('users', USER_SCHEMA, { timestamps: false });
     }
 
-    public async getUsersByParams( params: any ): Promise<any> {
+    private async isUserAlreadyExist( login: string ) {
+        return Boolean((
+            await this.getUsersByParams({
+                where: { login, isDeleted: false }
+            })
+        ).length);
+    }
+
+    private async getUsersByParams( params: any ): Promise<any> {
         return await this.User.findAll( params );
     }
 
@@ -37,14 +45,6 @@ class UsersService extends DBService{
                 isDeleted: false
             }
         });
-    }
-
-    public async isUserAlreadyExist( login: string ) {
-        return Boolean((
-            await this.getUsersByParams({
-                where: { login, isDeleted: false }
-            })
-            ).length);
     }
 
     public async createUser( user: User ): Promise<any> {
