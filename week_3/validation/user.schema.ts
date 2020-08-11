@@ -26,7 +26,7 @@ const ERROR_MESSAGES = {
     }
 }
 
-module.exports.createUserSchema = {
+export const createUserSchema = {
     type: 'object',
     required: ['login', 'password', 'age'],
     properties: {
@@ -37,7 +37,7 @@ module.exports.createUserSchema = {
     errorMessage: ERROR_MESSAGES
 };
 
-module.exports.updateUserSchema = {
+export const updateUserSchema = {
     type: 'object',
     required: [],
     properties: {
