@@ -7,8 +7,13 @@ export interface User {
 };
 
 export enum UserLimit {
-    DEFAULT = '20',
-    MIN = '10'
+    DEFAULT = '20'
 }
 
-export const UserType = Symbol.for('User');
+export interface UserServiceInterface {
+    getUsersByLoginSubstr( loginSubstringIn?: string, limit?: number ): Promise<User[] | null>,
+    getUserById( id: string ): Promise<User | null>,
+    createUser( user: User ): Promise<User | undefined>,
+    updateUser( user: User ): Promise<User | undefined>,
+    deleteUser( id: string ): Promise<User | undefined>
+}

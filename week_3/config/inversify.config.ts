@@ -1,5 +1,6 @@
 import { Container } from "inversify";
-import { DBInterface, DB } from "../types/db.types";
+
+import { DBInterface, DB } from '../types/db.types';
 import { PostgresDB } from '../loaders/postgresql';
 
 const serviceContainer = new Container();

@@ -1,17 +1,19 @@
 import { Op } from 'sequelize';
 import { v4 as uuidv4 } from "uuid";
+import { injectable } from 'inversify';
+import 'reflect-metadata';
 
-import { DBService } from './db.service';
 import { USER_SCHEMA } from '../models/user.model';
-import { User } from "../types/user.types";
+import { User, UserServiceInterface } from "../types/user.types";
 import { sortingByLoginASC } from "../utils/sortings";
+import { DBInterface } from "../types/db.types";
 
-class UsersService extends DBService{
+@injectable()
+class UsersService implements UserServiceInterface{
     private User: any;
 
-    constructor() {
-        super();
-        this.User = this.client.sequelize.define('users', USER_SCHEMA, { timestamps: false });
+    constructor( Db: DBInterface ) {
+        this.User = Db.client.define('users', USER_SCHEMA, { timestamps: false });
     }
 
     private async isUserAlreadyExist( login: string ) {
@@ -26,7 +28,7 @@ class UsersService extends DBService{
         return await this.User.findAll( params );
     }
 
-    public async getUsersByLoginSubstr(params: { loginSubstringIn?: string, limit?: number }): Promise<any> {
+    public async getUsersByLoginSubstr(params: any): Promise<any> {
         const users = await this.getUsersByParams({
             where: {
                 login: { [Op.like]: `%${params.loginSubstringIn}%` },
@@ -82,6 +84,5 @@ class UsersService extends DBService{
     }
 }
 
-const UserServiceInstance = new UsersService();
 
-export default UserServiceInstance;
+export { UsersService };

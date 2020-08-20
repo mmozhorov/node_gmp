@@ -1,16 +1,25 @@
 import express = require('express');
 
-import UsersService from '../services/users.service';
-import { createUserValidationMiddleware, updateUserValidationMiddleware } from '../utils/user-validation.middleware';
+import { serviceContainer } from '../config/inversify.config';
+
+import { DB, DBInterface } from "../types/db.types";
 import { User, UserLimit } from "../types/user.types";
 
+import { createUserValidationMiddleware, updateUserValidationMiddleware } from '../utils/user-validation.middleware';
+
+import { UsersService } from "../services/users.service";
+
 const router = express.Router();
+
+const DBInstance = serviceContainer.get<DBInterface>(DB);
+const UserServiceInstance = new UsersService(DBInstance);
 
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     try {
         const { loginSubstringIn = '', limit = UserLimit.DEFAULT} = req.query;
+
         // @ts-ignore
-        const users: User[] | null = await UsersService.getUsersByLoginSubstr({ loginSubstringIn, limit });
+        const users: User[] | null = await UserServiceInstance.getUsersByLoginSubstr({ loginSubstringIn, limit });
 
         if ( users )
             return res.status(200).json({ users });
@@ -28,7 +37,7 @@ router.get('/', async ( req: express.Request, res: express.Response, next ) => {
 router.get('/:id', async ( req: express.Request, res: express.Response, next ) => {
     try {
         const { id } = req.params;
-        const user: User | null = await UsersService.getUserById(id);
+        const user: User | null = await UserServiceInstance.getUserById(id);
 
         if( user )
             return res.status(200).json({ user: {
@@ -49,7 +58,7 @@ router.get('/:id', async ( req: express.Request, res: express.Response, next ) =
 router.post('/', createUserValidationMiddleware, async ( req: express.Request, res: express.Response, next ) => {
     try{
         const { login, password, age } = req.body;
-        const user = await UsersService.createUser({ login, password, age });
+        const user = await UserServiceInstance.createUser({ login, password, age });
 
 
         if( user )
@@ -73,7 +82,7 @@ router.post('/', createUserValidationMiddleware, async ( req: express.Request, r
 router.put('/:id', updateUserValidationMiddleware, async ( req: express.Request, res: express.Response, next ) => {
     const { id } = req.params;
     try{
-        const updatedUser = await UsersService.updateUser({ id, ...req.body });
+        const updatedUser = await UserServiceInstance.updateUser({ id, ...req.body });
 
         if( updatedUser )
             return res.status(200).json({ user: {
@@ -96,7 +105,7 @@ router.put('/:id', updateUserValidationMiddleware, async ( req: express.Request,
 router.delete('/:id', async ( req: express.Request, res: express.Response, next ) => {
     try{
         const { id } = req.params;
-        const result = await UsersService.deleteUser( id );
+        const result = await UserServiceInstance.deleteUser( id );
 
         if( result )
             return res.status(200).json({
