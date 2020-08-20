@@ -10,8 +10,4 @@ export class DBService{
     async connect() {
         return this.client.connect();
     }
-
-    async query( query: string ) {
-        return this.client.query(query);
-    }
 }

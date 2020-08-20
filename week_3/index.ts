@@ -2,7 +2,7 @@ import http from 'http';
 import { config } from 'dotenv';
 
 import app from './routers';
-import { DBService } from './services/db-service';
+import { DBService } from './services/db.service';
 
 (async function main() {
     try{
