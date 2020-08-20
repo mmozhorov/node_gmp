@@ -1,13 +1,15 @@
 import http from 'http';
 import { config } from 'dotenv';
 
+import { serviceContainer } from './config/inversify.config';
+import { DBInterface, DB } from "./types/db.types";
 import app from './routers';
-import { DBService } from './services/db.service';
 
 (async function main() {
     try{
-        const DBServiceInstance = new DBService();
-        await DBServiceInstance.connect();
+        const DBInstance = serviceContainer.get<DBInterface>(DB);
+
+        await DBInstance.connect();
         console.log("Successfully connected to db!");
 
         // @ts-ignore

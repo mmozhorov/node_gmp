@@ -1,19 +1,23 @@
+import { injectable } from 'inversify';
+import 'reflect-metadata';
 import Sequelize from 'sequelize';
 import { config } from 'dotenv';
+import { DBInterface } from '../types/db.types';
 
-export class DB {
-    protected readonly sequelize: any;
+@injectable()
+class PostgresDB implements DBInterface{
+    public readonly client: any;
 
     constructor() {
         // @ts-ignore
         const { DB, DB_HOST, DB_PORT, DB_USER, DB_PASSWORD } = config().parsed;
         // @ts-ignore
-        this.sequelize = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB}`);
+        this.client = new Sequelize(`postgres://${DB_USER}:${DB_PASSWORD}@${DB_HOST}:${DB_PORT}/${DB}`);
     }
 
     async connect() {
         try {
-            await this.sequelize.authenticate();
+            await this.client.authenticate();
             console.log('Connection has been established successfully.');
         }
         catch (error) {
@@ -21,3 +25,5 @@ export class DB {
         }
     }
 }
+
+export { PostgresDB };

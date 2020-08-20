@@ -1,4 +1,4 @@
-export type User = {
+export interface User {
     id?: string,
     login: string,
     password: string,
@@ -10,3 +10,5 @@ export enum UserLimit {
     DEFAULT = '20',
     MIN = '10'
 }
+
+export const UserType = Symbol.for('User');
