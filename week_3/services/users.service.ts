@@ -1,7 +1,7 @@
 import { Op } from 'sequelize';
 import { v4 as uuidv4 } from "uuid";
 
-import { DBService } from './DBService';
+import { DBService } from './db-service';
 import { USER_SCHEMA } from '../models/user.model';
 import { User } from "../types/user.types";
 import { sortingByLoginASC } from "../utils/sortings";
