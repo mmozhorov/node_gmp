@@ -20,8 +20,4 @@ export class DB {
             console.error('Unable to connect to the database:', error);
         }
     }
-
-    async query( query: string ) {
-        return await this.sequelize.query(query);
-    }
 }
