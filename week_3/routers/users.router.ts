@@ -17,8 +17,6 @@ const UserServiceInstance = new UsersService(DBInstance);
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     try {
         const { loginSubstringIn = '', limit = UserLimit.DEFAULT} = req.query;
-
-        // @ts-ignore
         const users: User[] | null = await UserServiceInstance.getUsersByLoginSubstr({ loginSubstringIn, limit });
 
         if ( users )
