@@ -12,11 +12,35 @@ class GroupsService implements GroupServiceInterface{
         this.Group = Db.client.define('groups', GROUP_SCHEMA, { timestamps: false });
     }
 
-    async getGroupById(id: string): Promise<Group | null> {
+    async getGroupById(id: string) {
+        return await this.Group.findOne({
+            where: { id }
+        });
+    }
 
+    async getAllGroups() {
+        return await this.Group.findAll();
+    }
+
+    async createGroup( group:  Group ) {
+        return await this.Group.create({
+            id: uuidv4(),
+            name: group.name,
+            permissions: group.permissions
+        });
+    }
+
+    async updateGroup( group:  Group ){
+        const { id } = group;
+        const [, [ updatedGroup ] ] = await this.Group.update( { ...group }, { returning: true, where: { id } });
+
+        return updatedGroup;
+    }
+
+    async removeGroup( id: string ){
+        const desiredGroup = await this.getGroupById(id);
+        return await desiredGroup.destroy();
     }
 }
 
-const GroupServiceInstance = new GroupsService();
-
-export default GroupServiceInstance;
+export { GroupsService };

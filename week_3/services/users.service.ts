@@ -24,11 +24,11 @@ class UsersService implements UserServiceInterface{
         ).length);
     }
 
-    private async getUsersByParams( params: any ): Promise<any> {
+    private async getUsersByParams( params: any ) {
         return await this.User.findAll( params );
     }
 
-    public async getUsersByLoginSubstr(params: any): Promise<any> {
+    public async getUsersByLoginSubstr(params: any) {
         const users = await this.getUsersByParams({
             where: {
                 login: { [Op.like]: `%${params.loginSubstringIn}%` },
@@ -40,7 +40,7 @@ class UsersService implements UserServiceInterface{
         return sortingByLoginASC(users);
     }
 
-    public async getUserById( id: string ): Promise<any> {
+    public async getUserById( id: string ) {
         return await this.User.findOne({
             where: {
                 id,
@@ -49,7 +49,7 @@ class UsersService implements UserServiceInterface{
         });
     }
 
-    public async createUser( user: User ): Promise<any> {
+    public async createUser( user: User ) {
         if( await this.isUserAlreadyExist( user.login ) )
             return;
 
@@ -61,7 +61,7 @@ class UsersService implements UserServiceInterface{
         });
     }
 
-    public async updateUser( user: User ): Promise<any> {
+    public async updateUser( user: User ) {
         const { id, login } = user;
 
         if( !await this.isUserAlreadyExist( login ) )
@@ -72,7 +72,7 @@ class UsersService implements UserServiceInterface{
         return updatedUser;
     }
 
-    public async deleteUser( id: string ): Promise<any> {
+    public async deleteUser( id: string ) {
         const user = await this.getUserById( id );
 
         if ( !user )
