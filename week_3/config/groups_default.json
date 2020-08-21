@@ -1,0 +1,19 @@
+{
+  "groups": [
+    {
+      "id": "0bd6e264-815c-4b71-890c-f9f40a5abb50",
+      "name": "Work group",
+      "permissions": [ "READ", "SHARE" ]
+    },
+    {
+      "id": "78b30465-17cc-49a1-8942-b03d7f2d5fad",
+      "name": "Swimming pool group",
+      "permissions": [ "WRITE", "DELETE" ]
+    },
+    {
+      "id": "323a097d-1123-4354-a43e-2deb15343bb0",
+      "name": "Road movie group",
+      "permissions": [ "READ", "WRITE", "UPLOAD_FILES" ]
+    }
+  ]
+}

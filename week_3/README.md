@@ -13,3 +13,7 @@
 <code>npm install</code>
 <br/> 
 <code>npm tun task1</code>
+
+<strong>For creating new migration file:</strong>
+<br/>
+<code>npx sequelize-cli migration:create --name [custom-name-of-migration]</code>
