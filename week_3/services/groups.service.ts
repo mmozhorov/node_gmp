@@ -14,9 +14,7 @@ class GroupsService implements GroupServiceInterface{
     private async isGroupAlreadyExist( groupId: string | undefined): Promise<boolean> {
         if ( !groupId ) return false;
 
-        return Boolean((
-            await this.getGroupById( groupId )
-        ).length);
+        return Boolean( await this.getGroupById( groupId ) );
     }
 
     async getGroupById(id: string) {
@@ -48,13 +46,17 @@ class GroupsService implements GroupServiceInterface{
             return;
 
         const [, [ updatedGroup ] ] = await this.Group.update( { ...group }, { returning: true, where: { id } });
+        console.log(await this.Group.update( { ...group }, { returning: true, where: { id } }));
 
         return updatedGroup;
     }
 
     async removeGroup( id: string ){
         const desiredGroup = await this.getGroupById(id);
-        return await desiredGroup.destroy();
+        if( desiredGroup )
+            return await desiredGroup.destroy();
+
+        return;
     }
 }
 

@@ -74,4 +74,47 @@ router.post('/', async ( req: express.Request, res: express.Response, next ) => 
     }
 });
 
+router.put('/:id', async ( req: express.Request, res: express.Response, next ) => {
+    const { id } = req.params;
+    try {
+        const { name, permissions } = req.body;
+        const updatedGroup = await GroupServiceInstance.updateGroup({ id, name, permissions });
+
+        if( updatedGroup )
+            return res.status(200).json({ group: {
+                    id: updatedGroup.id,
+                    name: updatedGroup.name,
+                    permissions: updatedGroup.permissions
+                }
+            })
+
+        return next({
+            statusCode: 404,
+            message: 'Group not found!'
+        });
+    }
+    catch( error ){
+        next(error);
+    }
+});
+
+router.delete('/:id', async ( req: express.Request, res: express.Response, next ) => {
+    try{
+        const { id } = req.params;
+        const result = await GroupServiceInstance.removeGroup( id );
+
+        if( result )
+            return res.status(200).json({
+                message: 'Group successfully removed!'
+            })
+        return next({
+            statusCode: 404,
+            message: 'Group not found!'
+        });
+    }
+    catch( error ){
+        next(error);
+    }
+});
+
 export default router;
