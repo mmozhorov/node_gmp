@@ -13,5 +13,3 @@ export interface GroupServiceInterface {
     updateGroup( group:  Group ): Promise<Group | null>,
     removeGroup( id: string ): Promise<Error | null>
 }
-
-export const GroupType = Symbol.for('Group');

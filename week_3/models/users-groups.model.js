@@ -8,5 +8,5 @@ module.exports.USER_GROUP_SCHEMA = {
     userId: {
         type: Sequelize.STRING,
         allowNull: false
-    },
+    }
 };
