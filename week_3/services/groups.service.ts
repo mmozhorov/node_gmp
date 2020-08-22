@@ -1,15 +1,14 @@
-import { Op } from 'sequelize';
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 
 import { Group, GroupServiceInterface } from '../types/group.types';
 import { DBInterface } from "../types/db.types";
-import { GROUP_SCHEMA } from '../models/group.model';
+import { GROUP_SCHEMA } from '../models/groups.model';
 
 class GroupsService implements GroupServiceInterface{
     private Group: any;
 
     constructor(Db: DBInterface) {
-        this.Group = Db.client.define('groups', GROUP_SCHEMA, { timestamps: false });
+        this.Group = Db.client.define('Groups', GROUP_SCHEMA, { timestamps: false });
     }
 
     async getGroupById(id: string) {

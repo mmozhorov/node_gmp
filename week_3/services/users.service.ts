@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
-import { USER_SCHEMA } from '../models/user.model';
+import { USER_SCHEMA } from '../models/users.model';
 import { User, UserServiceInterface } from "../types/user.types";
 import { sortingByLoginASC } from "../utils/sortings";
 import { DBInterface } from "../types/db.types";
@@ -13,7 +13,7 @@ class UsersService implements UserServiceInterface{
     private User: any;
 
     constructor( Db: DBInterface ) {
-        this.User = Db.client.define('users', USER_SCHEMA, { timestamps: false });
+        this.User = Db.client.define('Users', USER_SCHEMA, { timestamps: false });
     }
 
     private async isUserAlreadyExist( login: string ) {
@@ -83,6 +83,5 @@ class UsersService implements UserServiceInterface{
         return updatedUser;
     }
 }
-
 
 export { UsersService };
