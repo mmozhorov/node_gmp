@@ -7,7 +7,7 @@ export interface User {
 };
 
 export enum UserLimit {
-    DEFAULT = '20'
+    DEFAULT = 20
 }
 
 export interface UserServiceInterface {

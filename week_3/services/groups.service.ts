@@ -11,6 +11,14 @@ class GroupsService implements GroupServiceInterface{
         this.Group = Db.client.define('Groups', GROUP_SCHEMA, { timestamps: false });
     }
 
+    private async isGroupAlreadyExist( groupId: string | undefined): Promise<boolean> {
+        if ( !groupId ) return false;
+
+        return Boolean((
+            await this.getGroupById( groupId )
+        ).length);
+    }
+
     async getGroupById(id: string) {
         return await this.Group.findOne({
             where: { id }
@@ -22,6 +30,10 @@ class GroupsService implements GroupServiceInterface{
     }
 
     async createGroup( group:  Group ) {
+
+        if (await this.isGroupAlreadyExist(group.id))
+            return;
+
         return await this.Group.create({
             id: uuidv4(),
             name: group.name,
@@ -31,6 +43,10 @@ class GroupsService implements GroupServiceInterface{
 
     async updateGroup( group:  Group ){
         const { id } = group;
+
+        if ( !await this.isGroupAlreadyExist(group.id) )
+            return;
+
         const [, [ updatedGroup ] ] = await this.Group.update( { ...group }, { returning: true, where: { id } });
 
         return updatedGroup;
