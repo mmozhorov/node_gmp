@@ -3,8 +3,7 @@ const NAME_PROPERTIES = {
 };
 
 const PERMISSIONS_PROPERTIES = {
-    "type": "array",
-    "maxItems": 0
+    "type": "array"
 };
 
 const ERROR_MESSAGES = {
@@ -17,7 +16,7 @@ const ERROR_MESSAGES = {
 
 export const createGroupSchema = {
     type: 'object',
-    required: ['login', 'password', 'age'],
+    required: ['name', 'permissions'],
     properties: {
         "name": NAME_PROPERTIES,
         "permissions": PERMISSIONS_PROPERTIES
