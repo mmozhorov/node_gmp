@@ -1,7 +1,8 @@
 import { v4 as uuidv4 } from 'uuid';
 
+import { DBInterface } from '../types/db.types';
 import { Group, GroupServiceInterface } from '../types/group.types';
-import { DBInterface } from "../types/db.types";
+
 import { GROUP_SCHEMA } from '../models/groups.model';
 
 class GroupsService implements GroupServiceInterface{
@@ -46,7 +47,6 @@ class GroupsService implements GroupServiceInterface{
             return;
 
         const [, [ updatedGroup ] ] = await this.Group.update( { ...group }, { returning: true, where: { id } });
-        console.log(await this.Group.update( { ...group }, { returning: true, where: { id } }));
 
         return updatedGroup;
     }

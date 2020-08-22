@@ -5,7 +5,7 @@ import { serviceContainer } from '../config/inversify.config';
 import { DB, DBInterface } from "../types/db.types";
 import { User, UserLimit } from "../types/user.types";
 
-import { createUserValidationMiddleware, updateUserValidationMiddleware } from '../utils/user-validation.middleware';
+import { createUserValidationMiddleware, updateUserValidationMiddleware } from '../validation/users/user-validation.middleware';
 
 import { UsersService } from "../services/users.service";
 

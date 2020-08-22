@@ -7,6 +7,8 @@ import { GroupsService } from '../services/groups.service';
 import { DB, DBInterface } from '../types/db.types';
 import { Group } from '../types/group.types';
 
+import { createGroupValidationMiddleware, updateGroupValidationMiddleware } from '../validation/groups/group-validation.middleware';
+
 const router = express.Router();
 const DBInstance = serviceContainer.get<DBInterface>(DB);
 const GroupServiceInstance = new GroupsService(DBInstance);
@@ -51,7 +53,7 @@ router.get('/:id', async ( req: express.Request, res: express.Response, next ) =
     }
 });
 
-router.post('/', async ( req: express.Request, res: express.Response, next ) => {
+router.post('/', createGroupValidationMiddleware, async ( req: express.Request, res: express.Response, next ) => {
     try {
         const { name, permissions } = req.body;
         const newGroup = await GroupServiceInstance.createGroup({ name, permissions });
@@ -74,7 +76,7 @@ router.post('/', async ( req: express.Request, res: express.Response, next ) => 
     }
 });
 
-router.put('/:id', async ( req: express.Request, res: express.Response, next ) => {
+router.put('/:id', updateGroupValidationMiddleware, async ( req: express.Request, res: express.Response, next ) => {
     const { id } = req.params;
     try {
         const { name, permissions } = req.body;
