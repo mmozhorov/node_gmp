@@ -19,7 +19,8 @@ class UsersService implements UserServiceInterface{
     private async isUserAlreadyExist( login: string ) {
         return Boolean((
             await this.getUsersByParams({
-                where: { login, isDeleted: false }
+                where: { login, isDeleted: false },
+                attributes: [ 'id' ],
             })
         ).length);
     }
@@ -34,6 +35,7 @@ class UsersService implements UserServiceInterface{
                 login: { [Op.like]: `%${params.loginSubstringIn}%` },
                 isDeleted: false
             },
+            attributes: ['id', 'login', 'age'],
             limit: params.limit
         });
 
@@ -45,7 +47,8 @@ class UsersService implements UserServiceInterface{
             where: {
                 id,
                 isDeleted: false
-            }
+            },
+            attributes: ['id', 'login', 'age'],
         });
     }
 

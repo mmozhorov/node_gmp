@@ -15,8 +15,15 @@ app.use(( err: any, req: express.Request, res: express.Response, next: any ) => 
         return res.status(err.statusCode).json({
             message: err.message
         });
+    return next(err);
+});
 
+app.use(( err: any, req: express.Request, res: express.Response, next: any ) => {
     console.log(err);
+
+    return res.status(500).json({
+        message: 'Something went wrong!'
+    })
 });
 
 export default app;

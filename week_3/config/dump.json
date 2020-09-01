@@ -1,0 +1,56 @@
+{
+  "users": [
+    {
+      "id": "e7150ff8-bc06-4938-a1ec-9f69e76c66dc",
+      "login": "michael1234",
+      "password": "4321",
+      "age": 23,
+      "isDeleted": false
+    },
+    {
+      "id": "5d24340f-e89e-49e6-8803-7bab101d2410",
+      "login": "sergey",
+      "password": "admin",
+      "age": 31,
+      "isDeleted": true
+    },
+    {
+      "id": "15c40e6a-ff28-455d-b178-548686049d79",
+      "login": "ismael32",
+      "password": "3222",
+      "age": 40,
+      "isDeleted": false
+    }
+  ],
+  "groups": [
+    {
+      "id": "0bd6e264-815c-4b71-890c-f9f40a5abb50",
+      "name": "Work group",
+      "permissions": [ "READ", "SHARE" ]
+    },
+    {
+      "id": "78b30465-17cc-49a1-8942-b03d7f2d5fad",
+      "name": "Swimming pool group",
+      "permissions": [ "WRITE", "DELETE" ]
+    },
+    {
+      "id": "323a097d-1123-4354-a43e-2deb15343bb0",
+      "name": "Road movie group",
+      "permissions": [ "READ", "WRITE", "UPLOAD_FILES" ]
+    }
+  ],
+  "users_groups": [
+    {
+      "groupId": "0bd6e264-815c-4b71-890c-f9f40a5abb50",
+      "userId": "5d24340f-e89e-49e6-8803-7bab101d2410"
+    },
+    {
+      "groupId": "78b30465-17cc-49a1-8942-b03d7f2d5fad",
+      "userId": "5d24340f-e89e-49e6-8803-7bab101d2410"
+    },
+    {
+      "groupId": "323a097d-1123-4354-a43e-2deb15343bb0",
+      "userId": "e7150ff8-bc06-4938-a1ec-9f69e76c66dc"
+    }
+  ]
+}

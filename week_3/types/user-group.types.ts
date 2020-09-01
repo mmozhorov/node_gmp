@@ -4,6 +4,6 @@ export interface UserGroup {
 }
 
 export interface UserGroupServiceInterface {
-    addUsersToGroup( groupId: string, userIds: string[] ): Promise<any>,
-    removeUsersFromGroup( groupId: string, userIds: string[] ): Promise<any>
+    addUserToGroup( groupId: string, userId: string ): Promise<any>,
+    removeUserFromGroups( userId: string ): Promise<any>
 }

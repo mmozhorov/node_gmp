@@ -8,11 +8,12 @@ import { User, UserLimit } from "../types/user.types";
 import { createUserValidationMiddleware, updateUserValidationMiddleware } from '../validation/users/user-validation.middleware';
 
 import { UsersService } from "../services/users.service";
+import { UsersGroupsService } from "../services/users-groups.service";
 
 const router = express.Router();
 
-const DBInstance = serviceContainer.get<DBInterface>(DB);
-const UserServiceInstance = new UsersService(DBInstance);
+const UserServiceInstance = new UsersService( serviceContainer.get<DBInterface>(DB) );
+const UsersGroupsServiceInstance = new UsersGroupsService( serviceContainer.get<DBInterface>(DB) );
 
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     try {
@@ -103,9 +104,13 @@ router.put('/:id', updateUserValidationMiddleware, async ( req: express.Request,
 router.delete('/:id', async ( req: express.Request, res: express.Response, next ) => {
     try{
         const { id } = req.params;
-        const result = await UserServiceInstance.deleteUser( id );
 
-        if( result )
+        const [ removedUser ] = await Promise.all([
+            await UserServiceInstance.deleteUser( id ),
+            await UsersGroupsServiceInstance.removeUserFromGroups( id )
+        ]);
+
+        if( removedUser )
             return res.status(200).json({
                 message: 'User successfully removed!'
             })
