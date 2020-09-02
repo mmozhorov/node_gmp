@@ -21,6 +21,7 @@ import app from './routers';
         })
     }
     catch (error) {
+
         console.error(error);
     }
 }());

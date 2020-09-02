@@ -7,7 +7,7 @@ const PERMISSIONS_PROPERTIES = {
     "items": {
         type:'string',
         transform:['trim','toEnumCase'],
-        enum:['READ', 'WRITE']
+        enum:[ 'READ', 'WRITE', 'DELETE', 'SHARE', 'UPLOAD_FILES' ]
     }
 };
 
