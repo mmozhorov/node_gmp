@@ -1,5 +1,5 @@
 import { DBInterface } from '../types/db.types';
-import { UserGroupServiceInterface } from '../types/user-group.types';
+import { UserGroupServiceInterface, UserGroup } from '../types/user-group.types';
 import { USER_GROUP_SCHEMA } from '../models/users-groups.model';
 
 class UsersGroupsService implements UserGroupServiceInterface{
@@ -11,17 +11,38 @@ class UsersGroupsService implements UserGroupServiceInterface{
         this.UserGroup = Db.client.define('UserGroups', USER_GROUP_SCHEMA, { timestamps: false });
     }
 
-    async addUserToGroup(groupId: string, userId: string): Promise<any> {
-        return await this.client.transaction(async (t: any) => {
-            await this.UserGroup.create({ userId, groupId }, { transaction: t });
+    async addUsersToGroup( groupId: string, userIds: string[] ): Promise<UserGroup[]> {
+        const usersGroup: UserGroup[] = [];
+
+        await this.client.transaction(async (t: any) => {
+            for await ( let userId of userIds ) {
+                usersGroup.push(
+                    await this.UserGroup.create({
+                        userId,
+                        groupId
+                    }, { transaction: t })
+                );
+            }
         });
+
+        return usersGroup;
     }
 
-    async removeUserFromGroups( userId: string ): Promise<any> {
+    async removeUserRecords( userId: string ): Promise<any> {
         this.client.transaction(async (t: any) => {
             this.UserGroup.destroy({
                 where: {
                     userId
+                }
+            }, { transaction: t });
+        });
+    }
+
+    async removeGroupRecords ( groupId: string ): Promise<any> {
+        this.client.transaction(async (t: any) => {
+            this.UserGroup.destroy({
+                where: {
+                    groupId
                 }
             }, { transaction: t });
         });

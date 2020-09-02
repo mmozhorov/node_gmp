@@ -107,7 +107,7 @@ router.delete('/:id', async ( req: express.Request, res: express.Response, next 
 
         const [ removedUser ] = await Promise.all([
             await UserServiceInstance.deleteUser( id ),
-            await UsersGroupsServiceInstance.removeUserFromGroups( id )
+            await UsersGroupsServiceInstance.removeUserRecords( id )
         ]);
 
         if( removedUser )

@@ -3,6 +3,7 @@ import express from 'express';
 import { serviceContainer } from '../config/inversify.config';
 
 import { GroupsService } from '../services/groups.service';
+import { UsersGroupsService } from '../services/users-groups.service';
 
 import { DB, DBInterface } from '../types/db.types';
 import { Group } from '../types/group.types';
@@ -10,8 +11,9 @@ import { Group } from '../types/group.types';
 import { createGroupValidationMiddleware, updateGroupValidationMiddleware } from '../validation/groups/group-validation.middleware';
 
 const router = express.Router();
-const DBInstance = serviceContainer.get<DBInterface>(DB);
-const GroupServiceInstance = new GroupsService(DBInstance);
+
+const GroupServiceInstance = new GroupsService( serviceContainer.get<DBInterface>(DB) );
+const UsersGroupsServiceInstance = new UsersGroupsService( serviceContainer.get<DBInterface>(DB) );
 
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     try {
@@ -103,9 +105,13 @@ router.put('/:id', updateGroupValidationMiddleware, async ( req: express.Request
 router.delete('/:id', async ( req: express.Request, res: express.Response, next ) => {
     try{
         const { id } = req.params;
-        const result = await GroupServiceInstance.removeGroup( id );
 
-        if( result )
+        const [ removedGroup ] = await Promise.all([
+            await GroupServiceInstance.removeGroup( id ),
+            await UsersGroupsServiceInstance.removeGroupRecords( id )
+        ]);
+
+        if( removedGroup )
             return res.status(200).json({
                 message: 'Group successfully removed!'
             })
