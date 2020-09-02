@@ -3,7 +3,12 @@ const NAME_PROPERTIES = {
 };
 
 const PERMISSIONS_PROPERTIES = {
-    "type": "array"
+    "type": "array",
+    "items": {
+        type:'string',
+        transform:['trim','toEnumCase'],
+        enum:['READ', 'WRITE']
+    }
 };
 
 const ERROR_MESSAGES = {
