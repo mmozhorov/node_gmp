@@ -1,6 +1,7 @@
 import { DBInterface } from '../types/db.types';
 import { UserGroupServiceInterface, UserGroup } from '../types/user-group.types';
 import { USER_GROUP_SCHEMA } from '../models/users-groups.model';
+import { serviceLogger as log } from '../utils/logger.helpers';
 
 class UsersGroupsService implements UserGroupServiceInterface{
     private UserGroup: any;
@@ -11,6 +12,7 @@ class UsersGroupsService implements UserGroupServiceInterface{
         this.UserGroup = Db.client.define('UserGroups', USER_GROUP_SCHEMA, { timestamps: false });
     }
 
+    @log
     async addUsersToGroup( groupId: string, userIds: string[] ): Promise<UserGroup[]> {
         const usersGroup: UserGroup[] = [];
 
@@ -28,6 +30,7 @@ class UsersGroupsService implements UserGroupServiceInterface{
         return usersGroup;
     }
 
+    @log
     async removeUserRecords( userId: string ): Promise<any> {
         this.client.transaction(async (t: any) => {
             this.UserGroup.destroy({
@@ -38,6 +41,7 @@ class UsersGroupsService implements UserGroupServiceInterface{
         });
     }
 
+    @log
     async removeGroupRecords ( groupId: string ): Promise<any> {
         this.client.transaction(async (t: any) => {
             this.UserGroup.destroy({

@@ -2,8 +2,8 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { DBInterface } from '../types/db.types';
 import { Group, GroupServiceInterface } from '../types/group.types';
-
 import { GROUP_SCHEMA } from '../models/groups.model';
+import { serviceLogger as log } from '../utils/logger.helpers';
 
 class GroupsService implements GroupServiceInterface{
     private Group: any;
@@ -12,22 +12,26 @@ class GroupsService implements GroupServiceInterface{
         this.Group = Db.client.define('Groups', GROUP_SCHEMA, { timestamps: false });
     }
 
+    @log
     private async isGroupAlreadyExist( groupId: string | undefined): Promise<boolean> {
         if ( !groupId ) return false;
 
         return Boolean( await this.getGroupById( groupId ) );
     }
 
+    @log
     async getGroupById(id: string) {
         return await this.Group.findOne({
             where: { id }
         });
     }
 
+    @log
     async getAllGroups() {
         return await this.Group.findAll();
     }
 
+    @log
     async createGroup( group:  Group ) {
 
         if (await this.isGroupAlreadyExist(group.id))
@@ -40,6 +44,7 @@ class GroupsService implements GroupServiceInterface{
         });
     }
 
+    @log
     async updateGroup( group:  Group ){
         const { id } = group;
 
@@ -51,6 +56,7 @@ class GroupsService implements GroupServiceInterface{
         return updatedGroup;
     }
 
+    @log
     async removeGroup( id: string ){
         const desiredGroup = await this.getGroupById(id);
         if( desiredGroup )

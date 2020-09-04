@@ -1,12 +1,13 @@
 import { Op } from 'sequelize';
-import { v4 as uuidv4 } from "uuid";
+import { v4 as uuidv4 } from 'uuid';
 import { injectable } from 'inversify';
 import 'reflect-metadata';
 
 import { USER_SCHEMA } from '../models/users.model';
-import { User, UserServiceInterface } from "../types/user.types";
-import { sortingByLoginASC } from "../utils/sortings";
-import { DBInterface } from "../types/db.types";
+import { User, UserServiceInterface } from '../types/user.types';
+import { DBInterface } from '../types/db.types';
+import { sortingByLoginASC } from '../utils/sortings';
+import { serviceLogger as log } from '../utils/logger.helpers';
 
 @injectable()
 class UsersService implements UserServiceInterface{
@@ -16,6 +17,7 @@ class UsersService implements UserServiceInterface{
         this.User = Db.client.define('Users', USER_SCHEMA, { timestamps: false });
     }
 
+    @log
     private async isUserAlreadyExist( login: string ) {
         return Boolean((
             await this.getUsersByParams({
@@ -25,10 +27,12 @@ class UsersService implements UserServiceInterface{
         ).length);
     }
 
+    @log
     private async getUsersByParams( params: any ) {
         return await this.User.findAll( params );
     }
 
+    @log
     public async getUsersByLoginSubstr(params: any) {
         const users = await this.getUsersByParams({
             where: {
@@ -42,6 +46,7 @@ class UsersService implements UserServiceInterface{
         return sortingByLoginASC(users);
     }
 
+    @log
     public async getUserById( id: string ) {
         return await this.User.findOne({
             where: {
@@ -52,6 +57,7 @@ class UsersService implements UserServiceInterface{
         });
     }
 
+    @log
     public async createUser( user: User ) {
         if( await this.isUserAlreadyExist( user.login ) )
             return;
@@ -64,6 +70,7 @@ class UsersService implements UserServiceInterface{
         });
     }
 
+    @log
     public async updateUser( user: User ) {
         const { id, login } = user;
 
@@ -75,6 +82,7 @@ class UsersService implements UserServiceInterface{
         return updatedUser;
     }
 
+    @log
     public async deleteUser( id: string ) {
         const user = await this.getUserById( id );
 
