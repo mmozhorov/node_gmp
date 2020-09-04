@@ -5,7 +5,7 @@ import { LoggerInterface } from '../types/logger.types';
 @injectable()
 class CLILogger implements LoggerInterface{
     logServiceRequest( message: string ){
-        console.log(message);
+        console.log( message );
     }
 }
 
