@@ -5,10 +5,11 @@ import { LoggerInterface, Logger } from '../types/logger.types';
 
 import { PostgresDB } from '../loaders/postgresql';
 import { CLILogger } from '../loaders/cli-logger';
+import {WinstonLogger} from '../loaders/winston-logger';
 
 const serviceContainer = new Container();
 
 serviceContainer.bind<DBInterface>(DB).to(PostgresDB);
-serviceContainer.bind<LoggerInterface>(Logger).to(CLILogger);
+serviceContainer.bind<LoggerInterface>(Logger).to(WinstonLogger);
 
 export { serviceContainer };

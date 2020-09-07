@@ -60,7 +60,6 @@ router.post('/', createUserValidationMiddleware, async ( req: express.Request, r
         const { login, password, age } = req.body;
         const user = await UserServiceInstance.createUser({ login, password, age });
 
-
         if( user )
             return res.status(200).json({ user: {
                     id: user.id,
