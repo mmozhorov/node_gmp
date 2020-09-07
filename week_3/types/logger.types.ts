@@ -1,5 +1,6 @@
 export interface LoggerInterface {
-    logServiceRequest: ( method: string ) => void
+    logServiceRequest: ( message: string ) => void,
+    logError: ( message: string ) => void
 }
 
 export const Logger = Symbol.for('Logger');

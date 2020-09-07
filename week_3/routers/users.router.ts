@@ -9,6 +9,7 @@ import { createUserValidationMiddleware, updateUserValidationMiddleware } from '
 
 import { UsersService } from "../services/users.service";
 import { UsersGroupsService } from "../services/users-groups.service";
+import { routerErrorLog } from "../utils/logger.helpers";
 
 const router = express.Router();
 
@@ -25,11 +26,11 @@ router.get('/', async ( req: express.Request, res: express.Response, next ) => {
 
         return next({
             statusCode: 400,
-            message: 'Bad request!'
+                message: 'Bad request!'
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('GET /users', req.query, error ) );
     }
 });
 
@@ -50,7 +51,7 @@ router.get('/:id', async ( req: express.Request, res: express.Response, next ) =
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('GET /users/:id', req.params, error ) );
     }
 });
 
@@ -74,7 +75,7 @@ router.post('/', createUserValidationMiddleware, async ( req: express.Request, r
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('POST /users', req.body, error ) );
     }
 });
 
@@ -97,7 +98,7 @@ router.put('/:id', updateUserValidationMiddleware, async ( req: express.Request,
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('PUT /users/:id', { ...req.params, ...req.body }, error ) );
     }
 });
 
@@ -120,7 +121,7 @@ router.delete('/:id', async ( req: express.Request, res: express.Response, next 
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('DELETE /users/:id', req.params, error ) );
     }
 });
 

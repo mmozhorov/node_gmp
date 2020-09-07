@@ -22,20 +22,19 @@ import app from './routers';
             console.info(`Server is running on ${APP_PORT} port!`);
 
             process.on('uncaughtException', function ( err: Error ) {
-                loggerInstance.logServiceRequest(
+                loggerInstance.logError(
                     `Error type: ${ err.name }\nError message: ${ err.message }\nError trace: ${ err.stack }`
                 );
             });
 
             process.on('unhandledRejection', function ( reasonAny: any, p: Promise<any> ) {
-                loggerInstance.logServiceRequest(
+                loggerInstance.logError(
                     `Error type: Promise unhandled\nReject message: ${ reasonAny }\n`
                 );
             });
         })
     }
     catch (error) {
-
         console.error(error);
     }
 }());

@@ -9,6 +9,7 @@ import { DB, DBInterface } from '../types/db.types';
 import { Group } from '../types/group.types';
 
 import { createGroupValidationMiddleware, updateGroupValidationMiddleware } from '../validation/groups/group-validation.middleware';
+import { routerErrorLog } from "../utils/logger.helpers";
 
 const router = express.Router();
 
@@ -28,7 +29,7 @@ router.get('/', async ( req: express.Request, res: express.Response, next ) => {
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('GET /groups', {}, error ) );
     }
 });
 
@@ -51,7 +52,7 @@ router.get('/:id', async ( req: express.Request, res: express.Response, next ) =
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('GET /groups/:id', req.params, error ) );
     }
 });
 
@@ -74,7 +75,7 @@ router.post('/', createGroupValidationMiddleware, async ( req: express.Request, 
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('POST /groups', req.body, error ) );
     }
 });
 
@@ -98,7 +99,7 @@ router.put('/:id', updateGroupValidationMiddleware, async ( req: express.Request
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('PUT /users/:id', { ...req.params, ...req.body }, error ) );
     }
 });
 
@@ -121,7 +122,7 @@ router.delete('/:id', async ( req: express.Request, res: express.Response, next 
         });
     }
     catch( error ){
-        next(error);
+        next( routerErrorLog('DELETE /groups/:id', req.params, error ) );
     }
 });
 
