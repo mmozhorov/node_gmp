@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "task1": "npm run build && node ./build/index.js",
+    "start": "npm run build && node ./build/index.js",
     "build": "nodemon rimraf ./build && tsc",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",

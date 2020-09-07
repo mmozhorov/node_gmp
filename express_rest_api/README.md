@@ -12,7 +12,7 @@
 <br/>
 <code>npm install</code>
 <br/> 
-<code>npm tun task1</code>
+<code>npm tun start</code>
 
 <strong>For creating new migration file:</strong>
 <br/>
