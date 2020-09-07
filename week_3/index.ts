@@ -9,6 +9,7 @@ import app from './routers';
 (async function main() {
     try{
         const DBInstance = serviceContainer.get<DBInterface>(DB);
+        const loggerInstance = serviceContainer.get<LoggerInterface>(Logger);
 
         await DBInstance.connect();
         console.log("Successfully connected to db!");
@@ -21,14 +22,15 @@ import app from './routers';
             console.info(`Server is running on ${APP_PORT} port!`);
 
             process.on('uncaughtException', function ( err: Error ) {
-                serviceContainer.get<LoggerInterface>(Logger)
-                    .logServiceRequest(`Error type: ${ err.name }\nError message: ${ err.message }\nError trace: ${ err.stack }`
-                    );
+                loggerInstance.logServiceRequest(
+                    `Error type: ${ err.name }\nError message: ${ err.message }\nError trace: ${ err.stack }`
+                );
             });
 
-            process.on('unhandledRejection', function ( reasonany: any, p: Promise<any> ) {
-                serviceContainer.get<LoggerInterface>(Logger)
-                    .logServiceRequest( `Error type: Promise unha${reasonany} ${p} `);
+            process.on('unhandledRejection', function ( reasonAny: any, p: Promise<any> ) {
+                loggerInstance.logServiceRequest(
+                    `Error type: Promise unhandled\nReject message: ${ reasonAny }\n`
+                );
             });
         })
     }
@@ -37,5 +39,3 @@ import app from './routers';
         console.error(error);
     }
 }());
-
-setTimeout(() => { Promise.reject("lllkkkjhhjjh") }, 6000);
