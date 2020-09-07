@@ -1,6 +1,0 @@
-{
-  "watch": ["task1"],
-  "ext": ".ts,.js",
-  "ignore": [],
-  "exec": "ts-node ./task1/index.ts"
-}
