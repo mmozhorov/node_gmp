@@ -33,6 +33,17 @@ class UsersService implements UserServiceInterface{
     }
 
     @log
+    public async getUserByCredentials( login: string, password: string ) {
+        return await this.getUsersByParams({
+            where: {
+                login,
+                password,
+                isDeleted: false
+            }
+        })
+    }
+
+    @log
     public async getUsersByLoginSubstr(params: any) {
         const users = await this.getUsersByParams({
             where: {
