@@ -18,3 +18,11 @@ export const updateUserValidationMiddleware = (req: express.Request, res: expres
         message: errors.map( (err: any) => err.message ).join(',')
     }): next();
 };
+
+export const loginUserValidationMiddleware = (req: express.Request, res: express.Response, next: any) => {
+    const errors = validate(req.body, schemas.loginUserSchema);
+    return errors ? next({
+        statusCode: 400,
+        message: errors.map( (err: any) => err.message ).join(',')
+    }): next();
+};

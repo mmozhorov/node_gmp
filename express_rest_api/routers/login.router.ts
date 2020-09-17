@@ -4,11 +4,12 @@ import { serviceContainer } from '../config/inversify.config';
 import { DB, DBInterface } from '../types/db.types';
 import { UsersService } from '../services/users.service';
 import { routerErrorLog } from '../utils/logger.helpers';
+import { loginUserValidationMiddleware } from "../validation/users/user-validation.middleware";
 
 const router = express.Router();
 const UserServiceInstance = new UsersService( serviceContainer.get<DBInterface>(DB) );
 
-router.post('/', async ( req: express.Request, res: express.Response, next: any ) => {
+router.post('/', loginUserValidationMiddleware, async ( req: express.Request, res: express.Response, next: any ) => {
     try{
         const { login , password } = req.body;
         const token: string | null = await UserServiceInstance.login( login, password );

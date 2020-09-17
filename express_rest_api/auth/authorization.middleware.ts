@@ -4,9 +4,7 @@ import jwt from 'jsonwebtoken';
 export const authorization = async (req: express.Request, res: express.Response, next: any) => {
     const authHeader = req.header('Authorization');
 
-    console.log(authHeader);
-
-    if (authHeader) {
+    if ( authHeader ) {
         const token = authHeader.replace('Bearer ', '');
         const clockTimestamp = Math.floor(Date.now() / 1000);
         // @ts-ignore

@@ -47,3 +47,15 @@ export const updateUserSchema = {
     },
     errorMessage: ERROR_MESSAGES
 };
+
+export const loginUserSchema = {
+    type: 'object',
+    required: ['login', 'password'],
+    properties: {
+        "login": USER_LOGIN_PROPERTIES,
+        "password": {
+            "type": "string"
+        },
+    },
+    errorMessage: ERROR_MESSAGES
+};
