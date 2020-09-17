@@ -13,6 +13,7 @@ export enum UserLimit {
 export interface UserServiceInterface {
     getUsersByLoginSubstr( loginSubstringIn?: string, limit?: number ): Promise<User[] | null>,
     getUserByCredentials( login: string, password: string ): Promise<User | null>,
+    login( login: string, password: string ): Promise<string | null>,
     getUserById( id: string ): Promise<User | null>,
     createUser( user: User ): Promise<User | undefined>,
     updateUser( user: User ): Promise<User | undefined>,

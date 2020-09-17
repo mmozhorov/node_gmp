@@ -1,6 +1,7 @@
 import { Op } from 'sequelize';
 import { v4 as uuidv4 } from 'uuid';
 import { injectable } from 'inversify';
+import { config } from 'dotenv';
 import 'reflect-metadata';
 
 import { USER_SCHEMA } from '../models/users.model';
@@ -8,6 +9,7 @@ import { User, UserServiceInterface } from '../types/user.types';
 import { DBInterface } from '../types/db.types';
 import { sortingByLoginASC } from '../utils/sortings';
 import { serviceLogger as log } from '../utils/logger.helpers';
+import jwt from "jsonwebtoken";
 
 @injectable()
 class UsersService implements UserServiceInterface{
@@ -30,6 +32,22 @@ class UsersService implements UserServiceInterface{
     @log
     private async getUsersByParams( params: any ) {
         return await this.User.findAll( params );
+    }
+
+    @log
+    public async login( login: string, password: string ) {
+        // @ts-ignore
+        const { JWT_KEY } = config().parsed;
+        const [ user ] = await this.getUserByCredentials( login, password );
+
+        if (user)
+            return jwt.sign({
+                    exp: Math.floor(Date.now() / 1000) + (60 * 60),
+                    user: user.id},
+                JWT_KEY
+            );
+
+        return null;
     }
 
     @log
