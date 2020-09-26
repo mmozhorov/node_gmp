@@ -8,15 +8,16 @@
     "build": "nodemon rimraf ./build && tsc",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest --config ./jest.config.json"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
     "@types/node": "^14.0.24",
+    "jest": "^26.4.2",
+    "nodemon": "^2.0.4",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.5",
-    "nodemon": "^2.0.4"
+    "typescript": "^3.9.5"
   },
   "dependencies": {
     "@types/cors": "^2.8.7",
