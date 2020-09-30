@@ -13,8 +13,11 @@ beforeAll(() => {
     UserServiceInstance = new UsersService( serviceContainer.get<DBInterface>(DB) );
 });
 
+// @ts-ignore
 describe('My Test Suite', () => {
+    // @ts-ignore
     it('My Test Case', () => {
+        // @ts-ignore
         expect(true).toEqual(true);
     });
 });
