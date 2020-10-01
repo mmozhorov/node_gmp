@@ -19,7 +19,8 @@ const UsersGroupsServiceInstance = new UsersGroupsService( serviceContainer.get<
 router.get('/', async ( req: express.Request, res: express.Response, next ) => {
     try {
         const { loginSubstringIn = '', limit = UserLimit.DEFAULT} = req.query;
-        const users: User[] | null = await UserServiceInstance.getUsersByLoginSubstr({ loginSubstringIn, limit });
+        // @ts-ignore
+        const users: User[] | null = await UserServiceInstance.getUsersByLoginSubstr( loginSubstringIn, limit );
 
         if ( users )
             return res.status(200).json({ users });
