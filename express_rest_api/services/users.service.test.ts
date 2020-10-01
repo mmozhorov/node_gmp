@@ -54,5 +54,27 @@ describe('UsersService', () => {
                 user?.age === users[0].age
             ).toEqual(true);
         });
+
+        it('Check that we have null when try to call imagine id', async () => {
+            const user: User |  null = await UserServiceInstance.getUserById('test');
+            expect( user ).toEqual( null );
+        });
+    });
+
+    describe('createUser', async () => {
+       it('Check that we can create correct user info', async () => {
+           const testUser = {
+               login: 'test',
+               password: '12345qwerty',
+               age: 42
+           };
+           const noExistedUser: User[] |  null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
+           const createdUser: User | undefined = await UserServiceInstance.createUser( testUser );
+           const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
+
+           expect( noExistedUser?.length ).toBeFalsy();
+           expect( createdUser ).toBeTruthy();
+           expect( searchedUser ).toBeTruthy();
+       });
     });
 });
