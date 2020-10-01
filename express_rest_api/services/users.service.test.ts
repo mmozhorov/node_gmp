@@ -45,5 +45,14 @@ describe('UsersService', () => {
     });
 
     describe('getUserById', () => {
+        it('Check that method returns to us one user with login, age and id params',  async () => {
+            const user: User |  null = await UserServiceInstance.getUserById(users[0].id);
+            expect(
+                user &&
+                user.id === users[0].id &&
+                user?.login === users[0].login &&
+                user?.age === users[0].age
+            ).toEqual(true);
+        });
     });
 });
