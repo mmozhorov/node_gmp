@@ -62,8 +62,7 @@ class UsersService implements UserServiceInterface{
     }
 
     @log
-    public async getUsersByLoginSubstr(params: any) {
-        const { loginSubstringIn = '', limit = 20 } = params;
+    public async getUsersByLoginSubstr( loginSubstringIn = '', limit = 20 ) {
         const users = await this.getUsersByParams({
             where: {
                 login: { [Op.like]: `%${ loginSubstringIn }%` },

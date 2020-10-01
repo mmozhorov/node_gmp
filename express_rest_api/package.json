@@ -8,7 +8,9 @@
     "build": "nodemon rimraf ./build && tsc",
     "migrate": "sequelize db:migrate",
     "migrate-down": "sequelize db:migrate:undo",
-    "test": "set NODE_ENV=test&& npm run migrate-down && npm run migrate && jest --config ./jest.config.js"
+    "migrate-testing": "set NODE_ENV=test&& npm run migrate-down && npm run migrate",
+    "jest-test": "jest --config ./jest.config.js",
+    "test": "npm run migrate-testing && npm run jest-test"
   },
   "author": "",
   "license": "ISC",
