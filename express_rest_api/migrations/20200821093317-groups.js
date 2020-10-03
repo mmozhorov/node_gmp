@@ -17,6 +17,7 @@ module.exports = {
   },
 
   down: async ( queryInterface ) => {
+    await queryInterface.destroy('Groups', { where: {} });
     await queryInterface.dropTable( 'Groups' );
   }
 };
