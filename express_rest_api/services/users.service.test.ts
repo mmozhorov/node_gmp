@@ -1,5 +1,6 @@
 import { Container } from 'inversify';
 import { beforeAll } from '@jest/globals';
+const faker = require('faker');
 
 import { DBInterface, DB } from '../types/db.types';
 import {User, UserServiceInterface} from '../types/user.types';
@@ -7,6 +8,11 @@ import { PostgresqlTest } from '../loaders/postgresql-test';
 import { UsersService } from './users.service';
 import { users } from '../config/dump.json';
 
+const testUser = {
+    login: faker.internet.userName(),
+    password: faker.internet.password(),
+    age: faker.random.number()
+};
 const LIMIT = 2;
 const serviceContainer = new Container();
 let UserServiceInstance: UserServiceInterface;
@@ -61,20 +67,20 @@ describe('UsersService', () => {
         });
     });
 
-    describe('createUser', async () => {
-       it('Check that we can create correct user info', async () => {
-           const testUser = {
-               login: 'test',
-               password: '12345qwerty',
-               age: 42
-           };
+    describe('createUser', () => {
+       it('Check that we have not desired user before creating', async () => {
            const noExistedUser: User[] |  null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
-           const createdUser: User | undefined = await UserServiceInstance.createUser( testUser );
-           const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
-
            expect( noExistedUser?.length ).toBeFalsy();
-           expect( createdUser ).toBeTruthy();
-           expect( searchedUser ).toBeTruthy();
        });
+
+       it('Check right creating of user', async () => {
+           const createdUser: User | undefined = await UserServiceInstance.createUser( testUser );
+           expect( createdUser ).toBeTruthy();
+       });
+
+       it('Check searching of existed user', async () => {
+           const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
+           expect( searchedUser ).toBeTruthy();
+       })
     });
 });
