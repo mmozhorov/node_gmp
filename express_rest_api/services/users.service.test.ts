@@ -8,11 +8,18 @@ import { PostgresqlTest } from '../loaders/postgresql-test';
 import { UsersService } from './users.service';
 import { users } from '../config/dump.json';
 
+const testingUser = users[2];
+
 const testUser = {
     login: faker.internet.userName(),
     password: faker.internet.password(),
     age: faker.random.number()
 };
+
+const updatedTestUser = {
+    age: faker.random.number()
+};
+
 const LIMIT = 2;
 const serviceContainer = new Container();
 let UserServiceInstance: UserServiceInterface;
@@ -45,20 +52,19 @@ describe('UsersService', () => {
         });
 
         it('Check that searching by substring works correctly', async () => {
-            const desiredUsers: User[] |  null = await UserServiceInstance.getUsersByLoginSubstr(users[1].login);
-            expect(desiredUsers?.length && desiredUsers[0].id).toEqual(users[1].id);
+            const desiredUsers: User[] |  null = await UserServiceInstance.getUsersByLoginSubstr(testingUser.login);
+            expect(desiredUsers?.length && desiredUsers[0].id).toEqual(testingUser.id);
         });
     });
 
     describe('getUserById', () => {
         it('Check that method returns to us one user with login, age and id params',  async () => {
-            const user: User |  null = await UserServiceInstance.getUserById(users[0].id);
+            const user: User |  null = await UserServiceInstance.getUserById(testingUser.id);
             expect(
-                user &&
-                user.id === users[0].id &&
-                user?.login === users[0].login &&
-                user?.age === users[0].age
-            ).toEqual(true);
+                user?.id &&
+                user?.login &&
+                user?.age
+            ).toBeTruthy();
         });
 
         it('Check that we have null when try to call imagine id', async () => {
@@ -82,5 +88,41 @@ describe('UsersService', () => {
            const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
            expect( searchedUser ).toBeTruthy();
        })
+    });
+
+    describe('updateUser', () => {
+        it('Check that we have not updated info before update', async () => {
+            const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testingUser.login, testingUser.password );
+            expect( searchedUser?.length ).toBeTruthy();
+        });
+
+        it('Check right updating of user', async () => {
+            const updatedUser: User | undefined = await UserServiceInstance.updateUser( { ...testingUser , age: updatedTestUser.age } );
+            expect( updatedUser ).toBeTruthy();
+        });
+
+        it('Check searching of updated user', async () => {
+            const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testingUser.login, testingUser.password );
+            expect( searchedUser?.length ).toBeTruthy();
+            expect( searchedUser?.[0].age ).toEqual( updatedTestUser.age );
+        })
+    });
+
+    describe('removeUser', () => {
+        it('Check that we have not removed info before deleting', async () => {
+            const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
+            expect( searchedUser?.length ).toBeTruthy();
+        });
+
+        it('Check tight removing of user', async () => {
+            const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
+
+            if ( searchedUser )
+                await UserServiceInstance.deleteUser( searchedUser?.[0].id || '' );
+
+            const removedUser = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
+
+            expect( removedUser?.length ).toBeFalsy();
+        });
     });
 });
