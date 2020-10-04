@@ -114,7 +114,7 @@ describe('UsersService', () => {
             expect( searchedUser?.length ).toBeTruthy();
         });
 
-        it('Check tight removing of user', async () => {
+        it('Check right removing of user', async () => {
             const searchedUser: User[] | null = await UserServiceInstance.getUserByCredentials( testUser.login, testUser.password );
 
             if ( searchedUser )

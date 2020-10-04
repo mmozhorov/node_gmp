@@ -18,7 +18,6 @@ module.exports = {
   },
 
   down: async ( queryInterface ) => {
-    await queryInterface.destroy('Users', { where: {} });
     await queryInterface.dropTable( 'Users' );
   }
 };
