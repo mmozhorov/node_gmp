@@ -59,6 +59,7 @@ router.get('/:id', async ( req: express.Request, res: express.Response, next ) =
 router.post('/', createGroupValidationMiddleware, async ( req: express.Request, res: express.Response, next ) => {
     try {
         const { name, permissions } = req.body;
+        // @ts-ignore
         const newGroup = await GroupServiceInstance.createGroup({ name, permissions });
 
         if( newGroup )

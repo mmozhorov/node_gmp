@@ -30,8 +30,8 @@ beforeAll(() => {
     GroupsServiceInstance = new GroupsService( serviceContainer.get<DBInterface>(DB) );
 });
 
-describe('GroupsService', async () => {
-    describe('getAllGroups', async () => {
+describe('GroupsService', () => {
+    describe('getAllGroups', () => {
         it('Check that we have array of users with next params: id, login, age in default case', async () => {
             const groups: Group[] | null = await GroupsServiceInstance.getAllGroups();
 
@@ -48,7 +48,7 @@ describe('GroupsService', async () => {
         });
     });
 
-    describe('createGroup', async () => {
+    describe('createGroup', () => {
         it('Check that we have not desired user before creating', async () => {
             const groups: Group[] | null = await GroupsServiceInstance.getAllGroups();
             expect( groups?.find( group => group.name === testGroup.name )).toBeFalsy();
@@ -65,7 +65,7 @@ describe('GroupsService', async () => {
         });
     });
 
-    describe('updateGroup', async () => {
+    describe('updateGroup', () => {
         it('Check that we have not desired group info before updating', async () => {
             const group: Group | null = await GroupsServiceInstance.getGroupById( testingGroup.id );
             expect( group?.name ).toBeTruthy();
